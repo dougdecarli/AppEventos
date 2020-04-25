@@ -52,6 +52,4 @@ class EventsView: UIView {
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-    
-    
 }
