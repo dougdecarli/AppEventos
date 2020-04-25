@@ -28,6 +28,9 @@
 		4B6A7521245495E000A04DBC /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A7520245495E000A04DBC /* EventDetailViewController.swift */; };
 		4B6A7523245495EC00A04DBC /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A7522245495EC00A04DBC /* EventDetailView.swift */; };
 		4B6A7525245495F500A04DBC /* EventDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A7524245495F500A04DBC /* EventDetailViewModel.swift */; };
+		4B6A75292454976900A04DBC /* IconLabelStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A75282454976900A04DBC /* IconLabelStackView.swift */; };
+		4B6A752B2454979900A04DBC /* CheckinButtonsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A752A2454979900A04DBC /* CheckinButtonsStackView.swift */; };
+		4B6A752D245497A100A04DBC /* TryAgainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A752C245497A100A04DBC /* TryAgainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +56,9 @@
 		4B6A7520245495E000A04DBC /* EventDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController.swift; sourceTree = "<group>"; };
 		4B6A7522245495EC00A04DBC /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		4B6A7524245495F500A04DBC /* EventDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewModel.swift; sourceTree = "<group>"; };
+		4B6A75282454976900A04DBC /* IconLabelStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconLabelStackView.swift; sourceTree = "<group>"; };
+		4B6A752A2454979900A04DBC /* CheckinButtonsStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckinButtonsStackView.swift; sourceTree = "<group>"; };
+		4B6A752C245497A100A04DBC /* TryAgainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TryAgainView.swift; sourceTree = "<group>"; };
 		964EAB738D5326B74FEE5CE9 /* Pods_AppEventos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppEventos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4A10800218E3A26FAEA01F8 /* Pods-AppEventos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppEventos.debug.xcconfig"; path = "Target Support Files/Pods-AppEventos/Pods-AppEventos.debug.xcconfig"; sourceTree = "<group>"; };
 		C9D6A592E8E5549266978C9D /* Pods-AppEventos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppEventos.release.xcconfig"; path = "Target Support Files/Pods-AppEventos/Pods-AppEventos.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +163,7 @@
 		4B692DF624536E7D00DA88C9 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4B6A75272454973E00A04DBC /* Custom Views */,
 				4B692E0224537A5200DA88C9 /* Cells */,
 				4B692DFA245370F400DA88C9 /* Events */,
 				4B6A751F245495C100A04DBC /* EventDetail */,
@@ -207,10 +214,20 @@
 			isa = PBXGroup;
 			children = (
 				4B6A7520245495E000A04DBC /* EventDetailViewController.swift */,
-				4B6A7522245495EC00A04DBC /* EventDetailView.swift */,
 				4B6A7524245495F500A04DBC /* EventDetailViewModel.swift */,
+				4B6A7522245495EC00A04DBC /* EventDetailView.swift */,
 			);
 			path = EventDetail;
+			sourceTree = "<group>";
+		};
+		4B6A75272454973E00A04DBC /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+				4B6A75282454976900A04DBC /* IconLabelStackView.swift */,
+				4B6A752A2454979900A04DBC /* CheckinButtonsStackView.swift */,
+				4B6A752C245497A100A04DBC /* TryAgainView.swift */,
+			);
+			path = "Custom Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,15 +348,18 @@
 			files = (
 				4B692DFF2453714900DA88C9 /* EventsViewModel.swift in Sources */,
 				4B692E1024537EB300DA88C9 /* CollectionExtensions.swift in Sources */,
+				4B6A75292454976900A04DBC /* IconLabelStackView.swift in Sources */,
 				4B692E0824537AF800DA88C9 /* EventCellViewModel.swift in Sources */,
 				4B692E1A2453E55100DA88C9 /* EventService.swift in Sources */,
 				4B692E0C24537DA300DA88C9 /* DateFormatterExtension.swift in Sources */,
 				4B692DFD2453713E00DA88C9 /* EventsViewController.swift in Sources */,
+				4B6A752B2454979900A04DBC /* CheckinButtonsStackView.swift in Sources */,
 				4B6A7525245495F500A04DBC /* EventDetailViewModel.swift in Sources */,
 				4B692E0A24537CC900DA88C9 /* EventsModel.swift in Sources */,
 				4B692E0524537A6800DA88C9 /* EventViewCell.swift in Sources */,
 				4B692DDF24536E1A00DA88C9 /* AppDelegate.swift in Sources */,
 				4B692E162453839D00DA88C9 /* EventSectionHeader.swift in Sources */,
+				4B6A752D245497A100A04DBC /* TryAgainView.swift in Sources */,
 				4B692DE124536E1A00DA88C9 /* SceneDelegate.swift in Sources */,
 				4B6A7523245495EC00A04DBC /* EventDetailView.swift in Sources */,
 				4B692E132453815B00DA88C9 /* EventTableViewDataSource.swift in Sources */,
