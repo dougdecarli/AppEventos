@@ -25,7 +25,7 @@ enum EventCells {
     func height() -> CGFloat {
         switch self {
         case .EventCell(_):
-            return 70.0
+            return 253
         }
     }
     
