@@ -17,15 +17,30 @@ class EventCellViewModel {
     let price: BehaviorRelay<String>
     let month: BehaviorRelay<String>
     let day: BehaviorRelay<String>
-    let image: BehaviorRelay<UIImage>
+    let image: BehaviorRelay<UIImage> = BehaviorRelay<UIImage>(value: UIImage())
+    let event: BehaviorRelay<Event>
     var didPressed: PublishSubject<Any?> = PublishSubject<Any?>()
     
     init(event: Event) {
+        self.event = BehaviorRelay<Event>.init(value: event)
         self.title = BehaviorRelay<String>.init(value: event.title)
         self.price = BehaviorRelay<String>.init(value: "R$ \(event.price)")
         self.month = BehaviorRelay<String>.init(value: Date.getMonth(timestamp: event.date))
         self.day = BehaviorRelay<String>.init(value: Date.getDay(timestamp: event.date))
-        self.image = BehaviorRelay<UIImage>.init(value: UIImage())
+        setupImage()
+    }
+    
+    private func setupImage() {
+        self.image.accept(getImageFromUrl(url: event.value.image))
+    }
+    
+    private func getImageFromUrl(url: String) -> UIImage {
+        if let url = URL(string: url),
+            let data = try? Data(contentsOf: url),
+            let image = UIImage(data: data) {
+            return image
+        }
+        return UIImage(named: "generic-image") ?? UIImage()
     }
 }
 
