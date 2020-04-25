@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Bold.ttf">
+            <string>Roboto-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ImageDetailTableViewCell" customModule="AppEventos" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="eventSectionHeader" id="pa0-YA-IIw" customClass="EventSectionHeader" customModule="AppEventos" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="137"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yHz-tf-N2x">
+                    <rect key="frame" x="18" y="136" width="378" height="1"/>
+                    <color key="backgroundColor" red="0.8784313725490196" green="0.8784313725490196" blue="0.8784313725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="eQl-ZI-YkS"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="EVENTO" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LO7-mG-Vp7">
+                    <rect key="frame" x="18" y="54" width="378" height="72"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
+                    <color key="textColor" red="0.11764705882352941" green="0.11764705882352941" blue="0.12156862745098039" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="yHz-tf-N2x" firstAttribute="trailing" secondItem="LO7-mG-Vp7" secondAttribute="trailing" id="7ml-4e-xIR"/>
+                <constraint firstItem="yHz-tf-N2x" firstAttribute="leading" secondItem="LO7-mG-Vp7" secondAttribute="leading" id="Ebx-1q-PK8"/>
+                <constraint firstAttribute="trailing" secondItem="yHz-tf-N2x" secondAttribute="trailing" constant="18" id="dhd-E6-1ek"/>
+                <constraint firstItem="qTh-tA-8oE" firstAttribute="bottom" secondItem="yHz-tf-N2x" secondAttribute="bottom" id="g99-0N-gRo"/>
+                <constraint firstItem="yHz-tf-N2x" firstAttribute="leading" secondItem="pa0-YA-IIw" secondAttribute="leading" constant="18" id="gv7-wf-YNW"/>
+                <constraint firstItem="LO7-mG-Vp7" firstAttribute="top" secondItem="qTh-tA-8oE" secondAttribute="top" constant="10" id="vBQ-CX-o7o"/>
+                <constraint firstItem="yHz-tf-N2x" firstAttribute="top" secondItem="LO7-mG-Vp7" secondAttribute="bottom" constant="10" id="voC-FV-gMZ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="qTh-tA-8oE"/>
+            <connections>
+                <outlet property="titleLabel" destination="LO7-mG-Vp7" id="J8T-8c-e59"/>
+            </connections>
+            <point key="canvasLocation" x="-180" y="341"/>
+        </view>
+    </objects>
+</document>
