@@ -51,7 +51,7 @@ class EventsViewController: UIViewController {
         customView.tableView.rx.modelSelected(EventCells.self).subscribe(onNext: { (cell) in
             switch cell {
             case .EventCell(let viewModel):
-                viewModel.didPressed.on(.next(()))
+                viewModel.didPressed.on(.next((viewModel)))
             }
         }).disposed(by: disposeBag)
     }
@@ -71,6 +71,7 @@ class EventsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.navigationController = self.navigationController
         setupTableView()
         populateTableView()
     }

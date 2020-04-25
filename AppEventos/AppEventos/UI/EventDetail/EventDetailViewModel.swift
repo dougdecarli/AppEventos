@@ -85,8 +85,9 @@ class EventDetailViewModel {
     
     //MARK: - Outputs
     private func setupEventImageDriver() -> Driver<UIImage> {
-        let image = getImageFromUrl()
-        return Driver.just(image)
+        getImageFromUrl(url: event.value.image)
+            .map { $0 }
+            .asDriver(onErrorJustReturn: UIImage())
     }
     
     private func setupEventTitleDriver() -> Driver<String> {
@@ -109,13 +110,17 @@ class EventDetailViewModel {
     }
 
     //MARK: - Action and auxiliar funcs
-    private func getImageFromUrl() -> UIImage {
-        if let url = URL(string: event.value.image),
-            let data = try? Data(contentsOf: url),
-            let image = UIImage(data: data) {
-            return image
+    private func getImageFromUrl(url: String) -> Observable<UIImage> {
+        Observable.create { (observable) -> Disposable in
+            if let url = URL(string: url),
+                let data = try? Data(contentsOf: url),
+                let image = UIImage(data: data) {
+                observable.onNext(image)
+            } else {
+                observable.onNext(UIImage(named: "generic-image") ?? UIImage())
+            }
+            return Disposables.create {}
         }
-        return UIImage(named: "generic-image") ?? UIImage()
     }
     
     private func setupCoordinates() {

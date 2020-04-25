@@ -15,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="530" height="312"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="event" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cux-q3-NQa">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cux-q3-NQa">
                         <rect key="frame" x="8" y="8" width="514" height="200"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="200" id="x16-3Y-nMB"/>
@@ -112,7 +112,4 @@
             <point key="canvasLocation" x="-7" y="59"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="event" width="1280" height="1024"/>
-    </resources>
 </document>

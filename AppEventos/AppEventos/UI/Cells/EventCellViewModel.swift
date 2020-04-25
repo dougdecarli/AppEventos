@@ -19,7 +19,7 @@ class EventCellViewModel {
     let day: BehaviorRelay<String>
     let image: BehaviorRelay<UIImage> = BehaviorRelay<UIImage>(value: UIImage())
     let event: BehaviorRelay<Event>
-    var didPressed: PublishSubject<Any?> = PublishSubject<Any?>()
+    var didPressed: PublishSubject<EventCellViewModel?> = PublishSubject<EventCellViewModel?>()
     
     init(event: Event) {
         self.event = BehaviorRelay<Event>.init(value: event)

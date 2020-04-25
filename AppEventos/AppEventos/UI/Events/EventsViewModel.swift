@@ -21,46 +21,51 @@ class EventsViewModel {
     private var events = BehaviorRelay<[Event]>(value: [Event]())
     private let eventService = EventService()
     private var catchedError = BehaviorRelay<Bool>(value: false)
+    var navigationController: UINavigationController!
 
     // MARK: - cell items
     private var eventItems: [EventCells] = []
     
     // MARK: - viewModels
-    private var eventViewModel: EventCellViewModel?
+    private var eventViewModel = BehaviorRelay<EventCellViewModel?>(value: nil)
     
     // MARK: - cells
-    private var eventCell: EventCells?
+    private var eventCell: EventCells!
     
     init() {
-        setupEventCell()
+        setupEventCellObservable()
         loadEvents()
     }
     
-    private func setupEventCell() {
+    private func setupEventCellObservable() {
         events.asObservable()
             .skip(1)
             .flatMap(loadCells(events:))
             .subscribe()
             .disposed(by: disposeBag)
-        
-        self.eventViewModel?.didPressed
-        .asObservable()
-            .subscribe(onNext: { [weak self] _ in
-                self?.onCellTouched()
-            }).disposed(by: disposeBag)
     }
     
     private func loadCells(events: [Event]) -> Observable<Void> {
         Observable.create { [weak self] observable -> Disposable in
             for event in events {
-                self?.eventViewModel = EventCellViewModel(event: event)
-                self?.eventCell = EventCells.EventCell(viewModel: (self?.eventViewModel!)!)
-                self?.eventItems.append((self?.eventCell)!)
+                self?.setupCell(event: event)
             }
             self?.setupModels()
             observable.onCompleted()
             return Disposables.create {}
         }
+    }
+    
+    private func setupCell(event: Event) {
+        self.eventViewModel.accept(EventCellViewModel(event: event))
+        self.eventCell = EventCells.EventCell(viewModel: (self.eventViewModel.value!))
+        self.eventItems.append((self.eventCell)!)
+        
+        self.eventViewModel.value?.didPressed
+        .asObservable()
+            .subscribe(onNext: { [weak self] (viewModel) in
+                self?.onCellTouched(viewModel!)
+            }).disposed(by: disposeBag)
     }
     
     private func loadEvents() {
@@ -82,7 +87,9 @@ class EventsViewModel {
         })
     }
     
-    private func onCellTouched() {
-        
+    private func onCellTouched(_ cellViewModel: EventCellViewModel) {
+        let detailViewModel = EventDetailViewModel(event: cellViewModel.event.value)
+        let detailVC = EventDetailViewController(viewModel: detailViewModel)
+        self.navigationController.pushViewController(detailVC, animated: true)
     }
 }
