@@ -1,6 +1,9 @@
 PODS:
   - Differentiator (4.0.1)
   - ExpandableLabel (0.5.2)
+  - NVActivityIndicatorView (4.8.0):
+    - NVActivityIndicatorView/Presenter (= 4.8.0)
+  - NVActivityIndicatorView/Presenter (4.8.0)
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -15,6 +18,7 @@ PODS:
 
 DEPENDENCIES:
   - ExpandableLabel
+  - NVActivityIndicatorView
   - RxCocoa
   - RxDataSources
   - RxSwift (~> 5)
@@ -24,6 +28,7 @@ SPEC REPOS:
   trunk:
     - Differentiator
     - ExpandableLabel
+    - NVActivityIndicatorView
     - RxCocoa
     - RxDataSources
     - RxRelay
@@ -33,12 +38,13 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   ExpandableLabel: c2fab6d27860c572d67134b30522a5917746171d
+  NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: a87c76f2c54c9b8e30f5ad871a067b57b5d8f6df
+PODFILE CHECKSUM: 8a5eddea4e05558090deb633d5167c8ec96037b2
 
 COCOAPODS: 1.8.4
