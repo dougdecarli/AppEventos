@@ -12,4 +12,5 @@ pod 'RxCocoa'
 pod 'SwiftyJSON', '~> 4.0'
 pod 'ExpandableLabel'
 pod 'NVActivityIndicatorView'
+pod 'FacebookShare'
 end

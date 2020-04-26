@@ -11,6 +11,8 @@ import MapKit
 import ExpandableLabel
 import RxSwift
 import RxCocoa
+import FBSDKShareKit
+import FBSDKCoreKit
 
 class EventDetailViewController: UIViewController {
     
@@ -104,6 +106,8 @@ class EventDetailViewController: UIViewController {
         super.viewDidLoad()
         setupMapView()
         setupCheckinButton()
+        setupOnCheckinDone()
+        setupOnFacebookShare()
     }
 }
 
@@ -138,9 +142,77 @@ extension EventDetailViewController: MKMapViewDelegate {
         viewModel.event.asObservable()
             .subscribe(onNext: { [weak self] (event) in
                 guard let self = self else { return }
-                self.customView.checkinButtons.configViewComponents(rightButtonTitle: "Check-in (R$ \(event.price))", view: self.view)
+                self.customView.checkinButtons.configViewComponents(rightButtonTitle: "Check-in - R$ \(event.price)", view: self.view)
+            }).disposed(by: disposeBag)
+    }
+    
+    private func setupOnCheckinDone() {
+        viewModel.didCheckinWithSuccess.asObservable()
+            .skip(1)
+            .filter{$0}
+            .flatMap{ _ in self.didPerformCheckinWithSuccess() }
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        viewModel.didCheckinWithSuccess.asObservable()
+            .skip(1)
+            .filter{!$0}
+            .flatMap{ _ in self.didPerformCheckinWithError() }
+            .subscribe()
+            .disposed(by: disposeBag)
+    }
+    
+    private func didPerformCheckinWithError() -> Observable<Void> {
+        Observable.create { (observable) -> Disposable in
+            DispatchQueue.main.async {
+                Alert.show(title: "Ops",
+                           message: "Não foi possível realizar seu check-in neste evento. Tente novamente mais tarde!",
+                           viewController: self)
+            }
+            observable.onCompleted()
+            return Disposables.create {}
+        }
+    }
+    
+    private func didPerformCheckinWithSuccess() -> Observable<Void> {
+        Observable.create { (observable) -> Disposable in
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.35) {
+                    self.customView.checkinButtons.configViewComponents(rightButtonTitle: "Você está confirmado!", leftButtonTitle: "Compartilhar", view: self.view)
+                    self.view.layoutIfNeeded()
+                }
+                self.customView.checkinButtons.isActionButtonEnabled.accept(false)
+            }
+            observable.onCompleted()
+            return Disposables.create {}
+        }
+    }
+    
+    func setupOnFacebookShare() {
+        viewModel.shareContent.asObservable()
+        .skip(1)
+            .subscribe(onNext: { (shareContent) in
+                DispatchQueue.main.async {
+                    let shareDialog = ShareDialog(fromViewController: self, content: shareContent ?? ShareLinkContent(), delegate: self)
+                    shareDialog.mode = .automatic
+                    shareDialog.show()
+                }
             }).disposed(by: disposeBag)
     }
 }
 
-
+//MARK: FacebookShare Delegate
+extension EventDetailViewController: SharingDelegate {
+    
+    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+        
+    }
+    
+    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+        
+    }
+    
+    func sharerDidCancel(_ sharer: Sharing) {
+        
+    }
+}

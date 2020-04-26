@@ -12,6 +12,8 @@ import Contacts
 import MapKit
 import Social
 import RxCocoa
+import FBSDKShareKit
+import FBSDKCoreKit
 
 class EventDetailViewModel {
     private let disposeBag = DisposeBag()
@@ -19,6 +21,9 @@ class EventDetailViewModel {
     private var eventLocation: CLLocation? = nil
     var coordinateRegion: BehaviorRelay<MKCoordinateRegion>!
     var coordinates: BehaviorRelay<CLLocationCoordinate2D>!
+    var didCheckinWithSuccess = BehaviorRelay<Bool>(value: false)
+    var eventService: EventService!
+    var shareContent = BehaviorRelay<ShareLinkContent?>(value: nil)
 
     struct Input {
         let onBackButtonTouched: PublishRelay<Void>
@@ -57,8 +62,9 @@ class EventDetailViewModel {
     }
     
     //MARK: - Init
-    init(event: Event) {
+    init(event: Event, service: EventService) {
         self.event = BehaviorRelay<Event>(value: event)
+        self.eventService = service
     }
     
     //MARK: - Inputs
@@ -71,15 +77,16 @@ class EventDetailViewModel {
     
     private func setupOnRightButtonTouched(_ onRightButtonTouched: PublishRelay<Void>) {
         onRightButtonTouched.asObservable()
-            .subscribe(onNext: { _ in
-                
-            }).disposed(by: disposeBag)
+            .withLatestFrom(event)
+            .flatMap(eventService.checkin(event:))
+            .bind(to: didCheckinWithSuccess)
+            .disposed(by: disposeBag)
     }
     
     private func setupOnLeftButtonTouched(_ onLeftButtonTouched: PublishRelay<Void>) {
         onLeftButtonTouched.asObservable()
-            .subscribe(onNext: { _ in
-                
+            .subscribe(onNext: { [weak self] _ in
+                self?.onShareButtonTouched()
             }).disposed(by: disposeBag)
     }
     
@@ -133,7 +140,7 @@ class EventDetailViewModel {
                                                                                                                longitudeDelta: 0.05))))
     }
     
-    func getEventAddress(location: CLLocation) -> Observable<String> {
+    private func getEventAddress(location: CLLocation) -> Observable<String> {
         Observable.create { observable -> Disposable in
             CLGeocoder().reverseGeocodeLocation(location, preferredLocale: nil) { (clPlacemark: [CLPlacemark]?, error: Error?) in
                 var addressString: String = "Não foi possível recuperar o endereço"
@@ -155,6 +162,14 @@ class EventDetailViewModel {
             }
             return Disposables.create{}
         }
+    }
+    
+    private func onShareButtonTouched() {
+        let imageURL = URL(string: event.value.image)!
+        let share = ShareLinkContent()
+        share.contentURL = imageURL
+        share.quote = event.value.title
+        shareContent.accept(share)
     }
 }
 
