@@ -9,19 +9,22 @@
 import Foundation
 import RxCocoa
 import RxSwift
+import NVActivityIndicatorView
 
 enum EventSectionsName: String, CaseIterable {
     case events = "EVENTOS"
 }
 
-class EventsViewModel {
+class EventsViewModel: NVActivityIndicatorViewable {
     
     private let disposeBag = DisposeBag()
     var data: BehaviorRelay<[EventSectionModel]> = BehaviorRelay<[EventSectionModel]>(value: [])
     private var events = BehaviorRelay<[Event]>(value: [Event]())
     private let eventService = EventService()
-    private var catchedError = BehaviorRelay<Bool>(value: false)
+    var catchedError = BehaviorRelay<Bool>(value: false)
+    var onTryAgainButtonTouched = PublishRelay<Void>()
     var navigationController: UINavigationController!
+    let activityData = ActivityData()
 
     // MARK: - cell items
     private var eventItems: [EventCells] = []
@@ -34,6 +37,7 @@ class EventsViewModel {
     
     init() {
         setupEventCellObservable()
+        setupOnTryAgainButtonTouched()
         loadEvents()
     }
     
@@ -69,10 +73,14 @@ class EventsViewModel {
     }
     
     private func loadEvents() {
+        NVActivityIndicatorPresenter.sharedInstance.startAnimating(activityData)
         eventService.getEvents()
             .subscribe(onNext: { [weak self] (model) in
+                NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+                self?.catchedError.accept(false)
                 self?.events.accept(model)
             }, onError: { [weak self] (error) in
+                NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
                 self?.catchedError.accept(true)
             }).disposed(by: disposeBag)
     }
@@ -88,8 +96,17 @@ class EventsViewModel {
     }
     
     private func onCellTouched(_ cellViewModel: EventCellViewModel) {
-        let detailViewModel = EventDetailViewModel(event: cellViewModel.event.value)
+        let detailViewModel = EventDetailViewModel(event: cellViewModel.event.value,
+                                                   service: eventService,
+                                                   navigationController: navigationController)
         let detailVC = EventDetailViewController(viewModel: detailViewModel)
         self.navigationController.pushViewController(detailVC, animated: true)
+    }
+    
+    private func setupOnTryAgainButtonTouched() {
+        onTryAgainButtonTouched.asObservable()
+            .subscribe(onNext: { [weak self] _ in
+                self?.loadEvents()
+            }).disposed(by: disposeBag)
     }
 }

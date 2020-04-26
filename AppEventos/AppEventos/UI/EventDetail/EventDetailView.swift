@@ -28,7 +28,7 @@ class EventDetailView: UIView {
     var backButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "back-button"), for: .normal)
+        button.setImage(UIImage(named: "back"), for: .normal)
         button.isEnabled = true
         return button
     }()

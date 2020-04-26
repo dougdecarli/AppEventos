@@ -14,8 +14,9 @@ import Social
 import RxCocoa
 import FBSDKShareKit
 import FBSDKCoreKit
+import NVActivityIndicatorView
 
-class EventDetailViewModel {
+class EventDetailViewModel: NVActivityIndicatorViewable {
     private let disposeBag = DisposeBag()
     var event: BehaviorRelay<Event>
     private var eventLocation: CLLocation? = nil
@@ -24,6 +25,8 @@ class EventDetailViewModel {
     var didCheckinWithSuccess = BehaviorRelay<Bool>(value: false)
     var eventService: EventService!
     var shareContent = BehaviorRelay<ShareLinkContent?>(value: nil)
+    var navigationController: UINavigationController!
+    let activityData = ActivityData()
 
     struct Input {
         let onBackButtonTouched: PublishRelay<Void>
@@ -62,23 +65,30 @@ class EventDetailViewModel {
     }
     
     //MARK: - Init
-    init(event: Event, service: EventService) {
+    init(event: Event, service: EventService, navigationController: UINavigationController) {
         self.event = BehaviorRelay<Event>(value: event)
         self.eventService = service
+        self.navigationController = navigationController
     }
     
     //MARK: - Inputs
     private func setupOnBackButtonTouched(_ onBackButtonTouched: PublishRelay<Void>) {
         onBackButtonTouched.asObservable()
-            .subscribe(onNext: { _ in
-                
+            .subscribe(onNext: { [weak self] _ in
+                self?.navigationController.popViewController(animated: true)
             }).disposed(by: disposeBag)
     }
     
     private func setupOnRightButtonTouched(_ onRightButtonTouched: PublishRelay<Void>) {
         onRightButtonTouched.asObservable()
+            .do(onNext: { [weak self] _ in
+                NVActivityIndicatorPresenter.sharedInstance.startAnimating(self?.activityData ?? ActivityData())
+            })
             .withLatestFrom(event)
             .flatMap(eventService.checkin(event:))
+            .do(onNext: { _ in
+                NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+            })
             .bind(to: didCheckinWithSuccess)
             .disposed(by: disposeBag)
     }
@@ -142,7 +152,10 @@ class EventDetailViewModel {
     
     private func getEventAddress(location: CLLocation) -> Observable<String> {
         Observable.create { observable -> Disposable in
+            NVActivityIndicatorPresenter.sharedInstance.startAnimating(self.activityData)
             CLGeocoder().reverseGeocodeLocation(location, preferredLocale: nil) { (clPlacemark: [CLPlacemark]?, error: Error?) in
+                NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+                
                 var addressString: String = "Não foi possível recuperar o endereço"
                 guard let place = clPlacemark?.first else {
                     observable.onNext(addressString)

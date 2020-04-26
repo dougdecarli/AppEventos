@@ -56,10 +56,39 @@ class EventsViewController: UIViewController {
         }).disposed(by: disposeBag)
     }
     
-    private func populateTableView() {
+    private func bind() {
         viewModel.data
             .bind(to: customView.tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
+        customView
+            .tryAgainView.tryAgainButton.rx.tap
+            .bind(to: viewModel.onTryAgainButtonTouched)
+            .disposed(by: disposeBag)
+    }
+    
+    private func setupOnCatchedError() {
+        viewModel.catchedError.asObservable()
+            .filter { $0 }
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.customView.tableView.isHidden = true
+                    self.customView.tryAgainView.isHidden = false
+                    self.customView.tryAgainView.configViewComponents(errorMessage: "Não foi possível carregar as informações", buttonTitle: "Tentar novamente", view: self.view)
+                }
+            }).disposed(by: disposeBag)
+        
+        viewModel.catchedError.asObservable()
+            .filter {!$0}
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.customView.tableView.isHidden = false
+                    self.customView.tryAgainView.isHidden = true
+                    self.customView.tableView.reloadData()
+                }
+            }).disposed(by: disposeBag)
     }
     
     // MARK:- Overriding
@@ -73,7 +102,8 @@ class EventsViewController: UIViewController {
         super.viewDidLoad()
         viewModel.navigationController = self.navigationController
         setupTableView()
-        populateTableView()
+        setupOnCatchedError()
+        bind()
     }
 }
 

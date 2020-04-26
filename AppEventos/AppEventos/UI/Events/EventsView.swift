@@ -18,6 +18,12 @@ class EventsView: UIView {
         return $0
     }(UITableView())
     
+    let tryAgainView: TryAgainView = {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.isHidden = true
+        return $0
+    }(TryAgainView())
+    
     // MARK: Initializers
     init() {
         super.init(frame: .zero)
@@ -38,6 +44,7 @@ class EventsView: UIView {
 
     private func addSubviews() {
         addSubview(tableView)
+        addSubview(tryAgainView)
     }
     
     private func setupConstraints() {
