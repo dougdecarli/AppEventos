@@ -31,6 +31,7 @@
 		4B6A75292454976900A04DBC /* IconLabelStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A75282454976900A04DBC /* IconLabelStackView.swift */; };
 		4B6A752B2454979900A04DBC /* CheckinButtonsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A752A2454979900A04DBC /* CheckinButtonsStackView.swift */; };
 		4B6A752D245497A100A04DBC /* TryAgainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A752C245497A100A04DBC /* TryAgainView.swift */; };
+		4B6A752F2456100400A04DBC /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6A752E2456100400A04DBC /* Alert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,7 @@
 		4B6A75282454976900A04DBC /* IconLabelStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconLabelStackView.swift; sourceTree = "<group>"; };
 		4B6A752A2454979900A04DBC /* CheckinButtonsStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckinButtonsStackView.swift; sourceTree = "<group>"; };
 		4B6A752C245497A100A04DBC /* TryAgainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TryAgainView.swift; sourceTree = "<group>"; };
+		4B6A752E2456100400A04DBC /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		964EAB738D5326B74FEE5CE9 /* Pods_AppEventos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppEventos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4A10800218E3A26FAEA01F8 /* Pods-AppEventos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppEventos.debug.xcconfig"; path = "Target Support Files/Pods-AppEventos/Pods-AppEventos.debug.xcconfig"; sourceTree = "<group>"; };
 		C9D6A592E8E5549266978C9D /* Pods-AppEventos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppEventos.release.xcconfig"; path = "Target Support Files/Pods-AppEventos/Pods-AppEventos.release.xcconfig"; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		4B692DF224536E5D00DA88C9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4B6A752E2456100400A04DBC /* Alert.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				4B6A7523245495EC00A04DBC /* EventDetailView.swift in Sources */,
 				4B692E132453815B00DA88C9 /* EventTableViewDataSource.swift in Sources */,
 				4B6A7521245495E000A04DBC /* EventDetailViewController.swift in Sources */,
+				4B6A752F2456100400A04DBC /* Alert.swift in Sources */,
 				4B692E012453715500DA88C9 /* EventsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

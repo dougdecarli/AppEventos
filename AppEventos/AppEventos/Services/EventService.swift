@@ -37,4 +37,28 @@ class EventService {
             return Disposables.create{}
         }
     }
+    
+    func checkin(event: Event?) -> Observable<Bool> {
+        return Observable<Bool>.create { (observable) -> Disposable in
+            let url = URL(string: "\(self.apiUrl)/checkin")!
+            let params = ["eventId": event?.id, "name": "name", "email": "example@example.com"] as Dictionary<String, AnyObject>
+            let request : NSMutableURLRequest = NSMutableURLRequest()
+            request.url = url
+            request.httpMethod = "POST"
+            request.httpBody  = try! JSONSerialization.data(withJSONObject: params, options: [])
+            let configuration = URLSessionConfiguration .default
+            let session = URLSession(configuration: configuration)
+            
+            let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
+                if error != nil {
+                    observable.onNext(false)
+                } else {
+                    observable.onNext(true)
+                }
+                observable.onCompleted()
+            }
+            task.resume()
+            return Disposables.create{}
+        }
+    }
 }
