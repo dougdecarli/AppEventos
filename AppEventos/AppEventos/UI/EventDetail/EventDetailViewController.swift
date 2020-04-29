@@ -41,14 +41,13 @@ class EventDetailViewController: UIViewController {
     init(viewModel: ViewModel){
         super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
-        bind()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func bind() {
+    func bind() {
         bindInputs()
         bindOutputs()
     }
@@ -104,6 +103,7 @@ class EventDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
         setupMapView()
         setupCheckinButton()
         setupOnCheckinDone()
@@ -142,7 +142,7 @@ extension EventDetailViewController: MKMapViewDelegate {
         viewModel.event.asObservable()
             .subscribe(onNext: { [weak self] (event) in
                 guard let self = self else { return }
-                self.customView.checkinButtons.configViewComponents(rightButtonTitle: "Check-in - R$ \(event.price)", view: self.view)
+                self.customView.checkinButtons.configViewComponents(rightButtonTitle: "Check-in - R$ \(event.price ?? 0.0)", view: self.view)
             }).disposed(by: disposeBag)
     }
     

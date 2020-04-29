@@ -100,6 +100,7 @@ class EventsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.viewModel.allowLoadEvents.accept(())
         viewModel.navigationController = self.navigationController
         setupTableView()
         setupOnCatchedError()
