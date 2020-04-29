@@ -1,5 +1,5 @@
 PODS:
-  - Differentiator (4.0.1)
+  - Differentiator (3.1.0)
   - ExpandableLabel (0.5.2)
   - FacebookCore (0.9.0):
     - FBSDKCoreKit (~> 5.0)
@@ -20,25 +20,25 @@ PODS:
   - NVActivityIndicatorView (4.8.0):
     - NVActivityIndicatorView/Presenter (= 4.8.0)
   - NVActivityIndicatorView/Presenter (4.8.0)
-  - RxCocoa (5.1.1):
-    - RxRelay (~> 5)
-    - RxSwift (~> 5)
-  - RxDataSources (4.0.1):
-    - Differentiator (~> 4.0)
-    - RxCocoa (~> 5.0)
-    - RxSwift (~> 5.0)
-  - RxRelay (5.1.1):
-    - RxSwift (~> 5)
-  - RxSwift (5.1.1)
+  - RxCocoa (4.5.0):
+    - RxSwift (>= 4.4.2, ~> 4.4)
+  - RxDataSources (3.1.0):
+    - Differentiator (~> 3.0)
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxSwift (4.5.0)
+  - RxTest (4.5.0):
+    - RxSwift (>= 4.4.2, ~> 4.4)
   - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
   - ExpandableLabel
   - FacebookShare
   - NVActivityIndicatorView
-  - RxCocoa
+  - RxCocoa (~> 4.0)
   - RxDataSources
-  - RxSwift (~> 5)
+  - RxSwift (~> 4.0)
+  - RxTest
   - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
@@ -52,24 +52,24 @@ SPEC REPOS:
     - NVActivityIndicatorView
     - RxCocoa
     - RxDataSources
-    - RxRelay
     - RxSwift
+    - RxTest
     - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
+  Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
   ExpandableLabel: c2fab6d27860c572d67134b30522a5917746171d
   FacebookCore: ba86524b66cfa86d0f8e65d08faa8504a9f732dd
   FacebookShare: 85968ad1b1606c4944fb154924e425fd29184ea5
   FBSDKCoreKit: 1d5acf7c9d7a2f92bb1a242dc60cae5b7adb91df
   FBSDKShareKit: 259737eab3cc807087374553abdf588b3096ba55
   NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
-  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
-  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
-  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
-  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+  RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
+  RxDataSources: a843bad90c29817f5923ec8163f4af2de084ceb3
+  RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
+  RxTest: 3ccb66bfbace0bf7df1c43a7c75d046f8ce60372
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: a3ee53d43b79dcd6a500354a6fec2071cc48c09b
+PODFILE CHECKSUM: 122ce799bf86de173ad45614f4eb65692a5849a8
 
 COCOAPODS: 1.8.4

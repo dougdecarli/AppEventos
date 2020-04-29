@@ -4,13 +4,20 @@
 target 'AppEventos' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-
+  
   # Pods for AppEventos
-pod 'RxSwift', '~> 5'
-pod 'RxCocoa'
- pod 'RxDataSources'
-pod 'SwiftyJSON', '~> 4.0'
-pod 'ExpandableLabel'
-pod 'NVActivityIndicatorView'
-pod 'FacebookShare'
+  pod 'RxSwift', '~> 4.0'
+  pod 'RxCocoa', '~> 4.0'
+  pod 'RxDataSources'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'ExpandableLabel'
+  pod 'NVActivityIndicatorView'
+  pod 'FacebookShare'
+  
+  target 'AppEventosTests' do
+    pod 'RxSwift', '~> 4.0'
+    pod 'RxCocoa', '~> 4.0'
+    pod 'RxDataSources'
+    pod 'RxTest'
+  end
 end
