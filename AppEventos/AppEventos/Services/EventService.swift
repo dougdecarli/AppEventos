@@ -11,16 +11,33 @@ import SwiftyJSON
 import RxSwift
 import RxCocoa
 
-class EventService {
+protocol EventServiceProtocol {
+    func getEvents() -> Observable<[Event?]>
+    func checkin(event: Event?) -> Observable<Bool>
+}
+
+class EventService: EventServiceProtocol {
     
     private let apiUrl = "http://5b840ba5db24a100142dcd8c.mockapi.io/api/"
     
-    func getEvents() -> Observable<[Event]> {
+    private static var _instance: EventService? = nil
+    
+    public static var sharedInstance: EventService {
+        get {
+            if _instance == nil {
+                _instance = EventService()
+            }
+            
+            return _instance!
+        }
+    }
+    
+    func getEvents() -> Observable<[Event?]> {
         let url = URL(string: "\(self.apiUrl)/events")!
-        return Observable<[Event]>.create { (observable) -> Disposable in
+        return Observable<[Event?]>.create { (observable) -> Disposable in
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                if let error = error {
-                    observable.onError(error)
+                if error != nil {
+                    observable.onNext([nil])
                 }
                 
                 if let jsonData = data {
@@ -28,7 +45,7 @@ class EventService {
                         let events = try JSONDecoder().decode(Array<Event>.self, from: jsonData)
                         observable.onNext(events)
                     } catch {
-                        observable.onError(error)
+                        observable.onNext([nil])
                     }
                 }
                 observable.onCompleted()
@@ -41,7 +58,7 @@ class EventService {
     func checkin(event: Event?) -> Observable<Bool> {
         return Observable<Bool>.create { (observable) -> Disposable in
             let url = URL(string: "\(self.apiUrl)/checkin")!
-            let params = ["eventId": event?.id, "name": "name", "email": "example@example.com"] as Dictionary<String, AnyObject>
+            let params = ["eventId": event?.id, "name": event?.people[0].name, "email": "example@example.com"] as Dictionary<String, AnyObject>
             let request : NSMutableURLRequest = NSMutableURLRequest()
             request.url = url
             request.httpMethod = "POST"
@@ -59,6 +76,38 @@ class EventService {
             }
             task.resume()
             return Disposables.create{}
+        }
+    }
+}
+
+enum EventServiceMockBehavior {
+    case error
+    case success
+}
+
+final class EventServiceMock: EventServiceProtocol {
+    
+    var behavior: EventServiceMockBehavior
+    
+    init(behavior: EventServiceMockBehavior) {
+        self.behavior = behavior
+    }
+    
+    func getEvents() -> Observable<[Event?]> {
+        switch behavior {
+        case .success:
+            return .just([.eventMock()])
+        case .error:
+            return .just([nil])
+        }
+    }
+    
+    func checkin(event: Event?) -> Observable<Bool> {
+        switch behavior {
+        case .success:
+            return .just(true)
+        case .error:
+            return .just(false)
         }
     }
 }
