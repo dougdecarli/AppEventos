@@ -23,10 +23,14 @@ class EventDetailViewModel: NVActivityIndicatorViewable {
     var coordinateRegion: BehaviorRelay<MKCoordinateRegion>!
     var coordinates: BehaviorRelay<CLLocationCoordinate2D>!
     var didCheckinWithSuccess = BehaviorRelay<Bool>(value: false)
-    var eventService: EventService!
+    var onViewDidLoad = PublishRelay<Void>()
+    private var eventsService: EventServiceProtocol
+    private var geoService: GeolocationProtocol
     var shareContent = BehaviorRelay<ShareLinkContent?>(value: nil)
     var navigationController: UINavigationController!
     let activityData = ActivityData()
+    var checkinDouble = BehaviorRelay<ServiceMockDoubleBehavior>(value: .none)
+    var geolocationDouble = BehaviorRelay<ServiceMockDoubleBehavior>(value: .none)
 
     struct Input {
         let onBackButtonTouched: PublishRelay<Void>
@@ -65,9 +69,13 @@ class EventDetailViewModel: NVActivityIndicatorViewable {
     }
     
     //MARK: - Init
-    init(event: Event, service: EventService, navigationController: UINavigationController) {
+    init(event: Event,
+         eventsService: EventServiceProtocol = EventService.sharedInstance,
+         geoService: GeolocationProtocol = GeolocationService.sharedInstance,
+         navigationController: UINavigationController) {
         self.event = BehaviorRelay<Event>(value: event)
-        self.eventService = service
+        self.eventsService = eventsService
+        self.geoService = geoService
         self.navigationController = navigationController
     }
     
@@ -85,8 +93,9 @@ class EventDetailViewModel: NVActivityIndicatorViewable {
                 NVActivityIndicatorPresenter.sharedInstance.startAnimating(self?.activityData ?? ActivityData())
             })
             .withLatestFrom(event)
-            .flatMap(eventService.checkin(event:))
-            .do(onNext: { _ in
+            .flatMap(eventsService.checkin(event:))
+            .do(onNext: { (success) in
+                success ? self.checkinDouble.accept(.success) : self.checkinDouble.accept(.error)
                 NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
             })
             .bind(to: didCheckinWithSuccess)
@@ -102,28 +111,34 @@ class EventDetailViewModel: NVActivityIndicatorViewable {
     
     //MARK: - Outputs
     private func setupEventImageDriver() -> Driver<UIImage> {
-        getImageFromUrl(url: event.value.image)
+        getImageFromUrl(url: event.value.image ?? "")
             .map { $0 }
             .asDriver(onErrorJustReturn: UIImage())
     }
     
     private func setupEventTitleDriver() -> Driver<String> {
-        return Driver.just(event.value.title)
+        return Driver.just(event.value.title ?? "")
     }
     
     private func setupEventDateDriver() -> Driver<String> {
-        let date = Date.getDateFormatter(timestamp: event.value.date)
+        let date = Date.getDateFormatter(timestamp: event.value.date ?? 0.0)
         return Driver.just(date)
     }
     
-    private func setupEventAddressDriver() -> Driver<String> {
-        getEventAddress(location: eventLocation ?? CLLocation()).asObservable()
-            .map { $0 }
+    func setupEventAddressDriver() -> Driver<String> {
+        NVActivityIndicatorPresenter.sharedInstance.startAnimating(self.activityData)
+        return geoService.getAddress(location: eventLocation ?? CLLocation())
+            .do(onNext: { [weak self] (res) in
+                let response = res as String?
+                response == nil ? self?.geolocationDouble.accept(.error) : self?.geolocationDouble.accept(.success)
+                NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+            })
+            .map { $0 ?? "Não foi possível recuperar o endereço" }
             .asDriver(onErrorJustReturn: "")
     }
     
     private func setupEventDescriptionDriver() -> Driver<String> {
-        return Driver.just(event.value.description)
+        return Driver.just(event.value.description ?? "")
     }
 
     //MARK: - Action and auxiliar funcs
@@ -141,8 +156,8 @@ class EventDetailViewModel: NVActivityIndicatorViewable {
     }
     
     private func setupCoordinates() {
-        let eventLatitude = event.value.latitude
-        let eventLongitude = event.value.longitude
+        let eventLatitude = event.value.latitude ?? 0.0
+        let eventLongitude = event.value.longitude ?? 0.0
         eventLocation = CLLocation(latitude: eventLatitude, longitude: eventLongitude)
         coordinates = BehaviorRelay<CLLocationCoordinate2D>(value: (CLLocationCoordinate2D(latitude: eventLatitude, longitude: eventLongitude)))
         coordinateRegion = BehaviorRelay<MKCoordinateRegion>(value: (MKCoordinateRegion(center: coordinates.value,
@@ -150,35 +165,8 @@ class EventDetailViewModel: NVActivityIndicatorViewable {
                                                                                                                longitudeDelta: 0.05))))
     }
     
-    private func getEventAddress(location: CLLocation) -> Observable<String> {
-        Observable.create { observable -> Disposable in
-            NVActivityIndicatorPresenter.sharedInstance.startAnimating(self.activityData)
-            CLGeocoder().reverseGeocodeLocation(location, preferredLocale: nil) { (clPlacemark: [CLPlacemark]?, error: Error?) in
-                NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
-                
-                var addressString: String = "Não foi possível recuperar o endereço"
-                guard let place = clPlacemark?.first else {
-                    observable.onNext(addressString)
-                    return
-                }
-                
-                let postalAddressFormatter = CNPostalAddressFormatter()
-                postalAddressFormatter.style = .mailingAddress
-                
-                if let postalAddress = place.postalAddress {
-                    addressString = "\(postalAddress.street), \(postalAddress.city)"
-                    observable.onNext(addressString)
-                }
-                
-                observable.onNext(addressString)
-                observable.onCompleted()
-            }
-            return Disposables.create{}
-        }
-    }
-    
     private func onShareButtonTouched() {
-        let imageURL = URL(string: event.value.image)!
+        let imageURL = URL(string: event.value.image ?? "")!
         let share = ShareLinkContent()
         share.contentURL = imageURL
         share.quote = event.value.title

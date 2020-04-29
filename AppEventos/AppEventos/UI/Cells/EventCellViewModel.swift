@@ -23,15 +23,15 @@ class EventCellViewModel {
     
     init(event: Event) {
         self.event = BehaviorRelay<Event>.init(value: event)
-        self.title = BehaviorRelay<String>.init(value: event.title)
-        self.price = BehaviorRelay<String>.init(value: "R$ \(event.price)")
-        self.month = BehaviorRelay<String>.init(value: Date.getMonth(timestamp: event.date))
-        self.day = BehaviorRelay<String>.init(value: Date.getDay(timestamp: event.date))
+        self.title = BehaviorRelay<String>.init(value: event.title ?? "")
+        self.price = BehaviorRelay<String>.init(value: "R$ \(event.price ?? 0.0)")
+        self.month = BehaviorRelay<String>.init(value: Date.getMonth(timestamp: event.date ?? 0.0))
+        self.day = BehaviorRelay<String>.init(value: Date.getDay(timestamp: event.date ?? 0.0))
         setupImage()
     }
     
     private func setupImage() {
-        self.image.accept(getImageFromUrl(url: event.value.image))
+        self.image.accept(getImageFromUrl(url: event.value.image ?? ""))
     }
     
     private func getImageFromUrl(url: String) -> UIImage {
